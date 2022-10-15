@@ -40,7 +40,7 @@
     -->
             <div class="sidebar-wrapper">
                 <?php include('includes/sidebar.php')?>
-            
+        </div>
         </div>
         <div class="main-panel">
             <?php include('includes/navbar.php')?>
@@ -53,12 +53,13 @@
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
                                 <div class="card-header ">
-                                    <h4 class="card-title">Striped Table with Hover</h4>
-                                    <p class="card-category">Here is a subtitle for this table</p>
+                                    <h4 class="card-title">Office</h4>
+                                    <p class="card-category">Office informations</p>
                                 </div>
                                 <div class="card-body table-full-width table-responsive">
                                     <table class="table table-hover table-striped">
                                         <thead>
+                                            <th>ID</th>
                                             <th>NAME</th>
                                             <th>CONTACT NUMBER</th>
                                             <th>EMAIL</th>
@@ -70,6 +71,7 @@
                                         <tbody>
                                             <?php foreach ($offices as $office) : ?>
                                             <tr>
+                                                <td><?php echo $office ['id'] ?></td>
                                                 <td><?php echo $office ['name'] ?></td>
                                                 <td><?php echo $office ['contactnum'] ?></td>
                                                 <td><?php echo $office ['email'] ?></td>
@@ -122,7 +124,6 @@
                     </nav>
                 </div>
             </footer>
-        </div>
     </div>
     <!--   -->
     <!-- <div class="fixed-plugin">

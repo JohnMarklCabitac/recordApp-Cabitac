@@ -28,6 +28,7 @@
     -->
             <div class="sidebar-wrapper">
                 <?php include('includes/sidebar.php')?>
+            </div>
             <!--<div class="logo">
                     <a href="javascript:;" class="simple-text">
                       Your Logo
@@ -167,7 +168,6 @@
                 </div>
             </footer>
         </div>
-    </div>
     <!--   -->
     <!-- <div class="fixed-plugin">
     <div class="dropdown show-dropdown">
