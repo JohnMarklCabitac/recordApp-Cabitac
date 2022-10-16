@@ -23,16 +23,16 @@
     require ('config/config.php');
     require ('config/db.php');
 
-    $query = 'SELECT * FROM recordsapp.office ORDER BY name';
+    $query = 'SELECT employee.id, employee.lastname, employee.firstname, employee.address, office.name as Office_name FROM recordsapp.employee, recordsapp.office where employee.office_id = office.id';
     $result = mysqli_query($conn, $query);
-    $offices = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $employees = mysqli_fetch_all($result, MYSQLI_ASSOC);
     mysqli_free_result($result);
     mysqli_close($conn);
 
 
     ?>
     <div class="wrapper">
-        <div class="sidebar" data-image="../assets/img/sidebar-2.jpg">
+        <div class="sidebar" data-image="../assets/img/sidebar-3.jpg">
             <div class="sidebar-wrapper">
                 <?php include('includes/sidebar.php')?>
         </div>
@@ -48,31 +48,26 @@
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
                                 <div class="card-header ">
-                                    <h4 class="card-title">Offices</h4>
-                                    <p class="card-category">Office informations</p>
+                                    <h4 class="card-title">Employees</h4>
+                                    <p class="card-category">Employee informations</p>
                                 </div>
                                 <div class="card-body table-full-width table-responsive">
                                     <table class="table table-hover table-striped">
                                         <thead>
-                                            <th>NAME</th>
-                                            <th>CONTACT NUMBER</th>
-                                            <th>EMAIL</th>
+                                            <th>ID</th>
+                                            <th>LASTNAME</th>
+                                            <th>FIRSTNAME</th>
+                                            <th>OFFICE</th>
                                             <th>ADDRESS</th>
-                                            <th>CITY</th>
-                                            <th>COUNTRY</th>
-                                            <th>POSTAL</th>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($offices as $office) : ?>
+                                            <?php foreach ($employees as $employee) : ?>
                                             <tr>
-                                                <td><?php echo $office ['id'] ?></td>
-                                                <td><?php echo $office ['name'] ?></td>
-                                                <td><?php echo $office ['contactnum'] ?></td>
-                                                <td><?php echo $office ['email'] ?></td>
-                                                <td><?php echo $office ['address'] ?></td>
-                                                <td><?php echo $office ['city'] ?></td>
-                                                <td><?php echo $office ['country'] ?></td>
-                                                <td><?php echo $office ['postal'] ?></td>
+                                                <td><?php echo $employee ['id'] ?></td>
+                                                <td><?php echo $employee ['lastname'] ?></td>
+                                                <td><?php echo $employee ['firstname'] ?></td>
+                                                <td><?php echo $employee ['Office_name'] ?></td>
+                                                <td><?php echo $employee ['address'] ?></td>
                                             </tr>
                                             <?php endforeach ?>
                                         </tbody>
