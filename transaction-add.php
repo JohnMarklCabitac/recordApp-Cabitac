@@ -35,14 +35,16 @@
                 if(isset($_POST['submit'])){
 
                 // Get form data
-                    $lastname = mysqli_real_escape_string($conn,$_POST['lastname']);
-                    $firstname= mysqli_real_escape_string($conn,$_POST['firstname']);
+                    $documentcode = mysqli_real_escape_string($conn,$_POST['documentcode']);
+                    $action= mysqli_real_escape_string($conn,$_POST['action']);
+                    $remarks = mysqli_real_escape_string($conn,$_POST['remarks']);
+                    $employee_id = mysqli_real_escape_string($conn,$_POST['employee_id']);
                     $office_id = mysqli_real_escape_string($conn,$_POST['office_id']);
-                    $address = mysqli_real_escape_string($conn,$_POST['address']);
                     
+
                 // Create insert query
-                    $query = "INSERT INTO employee(lastname,firstname,office_id,address)
-                            VALUES('$lastname','$firstname',' $office_id','$$address')";
+                    $query = "INSERT INTO transaction(documentcode,action,remarks,employee_id,office_id)
+                            VALUES('$documentcode','$action','$remarks','$employee_id','$office_id')";
 
                 // Execute query
                 if(mysqli_query($conn,$query)){
@@ -59,25 +61,52 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">Edit Profile</h4>
+                                <div class=" card-header">
+                                    <h4 class="card-title">Transaction</h4>
                                 </div>
                                 <div class="card-body">
                                     <form method="POST" action="<?php $_SERVER['PHP_SELF']; ?>">
-                                        <div class="row">
-                                            <div class="col-md-4 pr-1">
-                                                <div class="form-group">
-                                                    <label>Last Name</label>
-                                                    <input  type="text" class="form-control" name="lastname">
-                                                </div>
+                                    <div class="row">
+                                        <div class="col-md-3 pr-1">
+                                            <div class="form-group">
+                                                <label>Document Code</label>
+                                                <input type="text" class="form-control" name="documentcode">
                                             </div>
-                                            <div class="col-md-4 pr-1">
-                                                <div class="form-group">
-                                                    <label>First Name</label>
-                                                    <input type="text" class="form-control" name="firstname" >
-                                                </div> 
+                                        </div>
+                                        <div class="col-md-3 pr-1">
+                                            <div class="form-group">
+                                                <label>Action</label>
+                                                <select class="form-control" name="action">
+                                                    <option>IN</option>
+                                                    <option>OUT</option>
+                                                    <option>COMPLETE</option>
+                                                </select>
                                             </div>
-                                            <div class="col-md-4 pr-1">
+                                        </div>
+                                        <div class="col-md-3 pr-1">
+                                            <div class="form-group">
+                                                <label>Remarks</label>
+                                                <input type="text" class="form-control" name="remarks">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                            <label for="exampleInputEmail1">Employee</label> 
+                                                <select class="form-control" type="text" name='employee_id'>
+                                                <option>Select....</option>
+                                                <?php
+                                                    $query = "SELECT id, CONCAT(lastname,', ',firstname) AS Employee FROM records_app.employee";
+                                                    $result = mysqli_query($conn, $query);
+                                                    while ($row = mysqli_fetch_array($result)){
+                                                        echo "<option value=" . $row['id'] . ">" . $row['Employee'] . '</option>';
+                                                    }
+                                                ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Office</label> 
                                                 <select class="form-control" type="text" name='office_id'>
@@ -90,21 +119,14 @@
                                                     }
                                                 ?>
                                                 </select>
-                                                </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label>Address / Building</label>
-                                                        <input  type="text" class="form-control" name="address">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <button type="submit" name="submit" value="Submit" class="btn btn-info btn-fill pull-right">Save</button>
+                                    </div>
+                                    <button type="submit" name="submit" value="Submit" class="btn btn-info btn-fill pull-right">Save</button>
                                             <div class="clearfix"></div>
                                     </form>
                                 </div>
+
                             </div>
                         </div>
                     </div>

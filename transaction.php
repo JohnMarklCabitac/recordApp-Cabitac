@@ -43,6 +43,12 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
+                            <br>
+                                <div class="col-md-12">
+                                <a href="./transaction-add.php"> 
+                                <button type="submit" class="btn btn-info btn-fill pull-right">Add New Transaction</button>
+                                </a>
+                                </div>
                                 <div class="card-header ">
                                     <h4 class="card-title">Transactions</h4>
                                     <p class="card-category">Transaction infromation</p>
