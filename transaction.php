@@ -22,9 +22,8 @@
     <?php
         require('config/config.php');
         require('config/db.php');
-        $query = 'SELECT transaction.datelog, transaction.documentscode, transaction.action, office.name AS office_name, CONCAT(employee.firstname, ",", employee.lastname) AS employee_fullname FROM recordsapp.employee, recordsapp.office, recordsapp.transaction 
+        $query = 'SELECT transaction.datelog, transaction.documentcode, transaction.action, office.name AS office_name, CONCAT(employee.firstname, ",", employee.lastname) AS employee_fullname, transaction.remarks FROM records_app.employee, records_app.office, records_app.transaction 
         WHERE transaction.employee_id = employee.id AND transaction.office_id = office.id';
-        //$query = 'SELECT employee.lastname, employee.firstname, employee.office_id, employee.address, office.name AS office_name FROM recordsapp.employee INNER JOIN recordsapp.office ON employee.office_id = office.id';
         $result = (mysqli_query($conn,$query));
         $transactions = mysqli_fetch_all($result, MYSQLI_ASSOC);
         mysqli_free_result($result);
@@ -33,10 +32,6 @@
 
     <div class="wrapper">
         <div class="sidebar" data-image="assets/img/sidebar-4.jpg">
-            <!--
-        Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
-
-        Tip 2: you can also add an image using data-image tag-->
         <div class="sidebar-wrapper">
                 <?php include('includes/sidebar.php') ?>
         </div>
@@ -66,11 +61,11 @@
                                             <?php foreach ($transactions as $transaction) : ?>
                                             <tr>      
                                                 <td><?php echo $transaction['datelog'] ?></td>         
-                                                <td><?php echo $transaction['documents_code'] ?></td>         
+                                                <td><?php echo $transaction['documentcode'] ?></td>         
                                                 <td><?php echo $transaction['action'] ?></td>         
                                                 <td><?php echo $transaction['office_name'] ?></td>                  
                                                 <td><?php echo $transaction['employee_fullname'] ?></td>                  
-                                                <td><?php echo $transaction['remark'] ?></td>                  
+                                                <td><?php echo $transaction['remarks'] ?></td>                  
                                             </tr>
                                             <?php endforeach ?>
                                         </tbody>

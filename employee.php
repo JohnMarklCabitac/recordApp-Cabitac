@@ -23,7 +23,7 @@
     require ('config/config.php');
     require ('config/db.php');
 
-    $query = 'SELECT employee.id, employee.lastname, employee.firstname, employee.address, office.name as Office_name FROM recordsapp.employee, recordsapp.office where employee.office_id = office.id';
+    $query = 'SELECT employee.id, employee.lastname, employee.firstname, employee.address, office.name as Office_name FROM records_app.employee, records_app.office where employee.office_id = office.id ORDER BY employee.lastname';
     $result = mysqli_query($conn, $query);
     $employees = mysqli_fetch_all($result, MYSQLI_ASSOC);
     mysqli_free_result($result);
@@ -47,6 +47,13 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
+                            
+                            <br>
+                            <div class="col-md-12">
+                                <a href="./employee-add.php"> 
+                                <button type="submit" class="btn btn-info btn-fill pull-right">Add New Employee</button>
+                                </a>
+                            </div>
                                 <div class="card-header ">
                                     <h4 class="card-title">Employees</h4>
                                     <p class="card-category">Employee informations</p>

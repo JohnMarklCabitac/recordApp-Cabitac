@@ -23,7 +23,7 @@
     require ('config/config.php');
     require ('config/db.php');
 
-    $query = 'SELECT * FROM recordsapp.office ORDER BY name';
+    $query = 'SELECT * FROM records_app.office ORDER BY name';
     $result = mysqli_query($conn, $query);
     $offices = mysqli_fetch_all($result, MYSQLI_ASSOC);
     mysqli_free_result($result);
@@ -47,6 +47,13 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
+                                <br>
+                                <div class="col-md-12">
+                                <a href="./office-add.php"> 
+                                <button type="submit" class="btn btn-info btn-fill pull-right">Add New Office</button>
+                                </a>
+                                </div>
+
                                 <div class="card-header ">
                                     <h4 class="card-title">Offices</h4>
                                     <p class="card-category">Office informations</p>
@@ -65,7 +72,7 @@
                                         <tbody>
                                             <?php foreach ($offices as $office) : ?>
                                             <tr>
-                                                <td><?php echo $office ['id'] ?></td>
+
                                                 <td><?php echo $office ['name'] ?></td>
                                                 <td><?php echo $office ['contactnum'] ?></td>
                                                 <td><?php echo $office ['email'] ?></td>
