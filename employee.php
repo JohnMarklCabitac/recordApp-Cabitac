@@ -23,7 +23,28 @@
     require ('config/config.php');
     require ('config/db.php');
 
-    $query = 'SELECT employee.id, employee.lastname, employee.firstname, employee.address, office.name as Office_name FROM records_app.employee, records_app.office where employee.office_id = office.id ORDER BY employee.lastname';
+    //define the total number of result you want per page
+    $result_per_page = 10;
+
+    // find tha total number of results/rows stored in the database
+            $query ="SELECT * FROM employee";
+            $result = mysqli_query($conn, $query);
+            $number_of_result = mysqli_num_rows($result);
+    
+    // determine the total number of page avialable
+            $number_of_page = ceil($number_of_result / $result_per_page);
+    
+            // determine which page number visitor is on
+             if(!isset($_GET['page'])){
+                $page = 1;
+             }else{
+                $page = $_GET['page'];
+             }
+    //determine thr sql LIMIT starting number for the results on the display page
+            $page_first_result = ($page-1) * $result_per_page;
+
+    $query = 'SELECT employee.id, employee.lastname, employee.firstname, employee.address, office.name as Office_name 
+    FROM records_app.employee, records_app.office where employee.office_id = office.id ORDER BY employee.lastname LIMIT ' . $page_first_result . ',' . $result_per_page;
     $result = mysqli_query($conn, $query);
     $employees = mysqli_fetch_all($result, MYSQLI_ASSOC);
     mysqli_free_result($result);
@@ -66,6 +87,7 @@
                                             <th>FIRSTNAME</th>
                                             <th>OFFICE</th>
                                             <th>ADDRESS</th>
+                                            <th>ACTION</th>
                                         </thead>
                                         <tbody>
                                             <?php foreach ($employees as $employee) : ?>
@@ -75,14 +97,23 @@
                                                 <td><?php echo $employee ['firstname'] ?></td>
                                                 <td><?php echo $employee ['Office_name'] ?></td>
                                                 <td><?php echo $employee ['address'] ?></td>
+                                                <td>
+                                                    <a href="employee-edit.php?id=<?php echo $employee['id']; ?>">
+                                                        <button type="submit" class="btn btn-warning btn-fill pull-right">Edit</button>
+                                                </td>
                                             </tr>
+                                            
                                             <?php endforeach ?>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div><?php
+                            for($page=1; $page <= $number_of_page; $page++){
+                                echo '<a href = "employee.php?page='. $page . '">' . $page .'</a>';
+                            }
+                        ?>
                 </div>
             </div>
             <footer class="footer">

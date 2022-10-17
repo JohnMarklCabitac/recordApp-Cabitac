@@ -23,7 +23,27 @@
     require ('config/config.php');
     require ('config/db.php');
 
-    $query = 'SELECT * FROM records_app.office ORDER BY name';
+//define the total number of result you want per page
+    $result_per_page = 10;
+
+// find tha total number of results/rows stored in the database
+    $query ="SELECT * FROM employee";
+    $result = mysqli_query($conn, $query);
+    $number_of_result = mysqli_num_rows($result);
+    
+// determine the total number of page avialable
+    $number_of_page = ceil($number_of_result / $result_per_page);
+    
+// determine which page number visitor is on
+    if(!isset($_GET['page'])){
+        $page = 1;
+    }else{
+        $page = $_GET['page'];
+    }
+//determine thr sql LIMIT starting number for the results on the display page
+            $page_first_result = ($page-1) * $result_per_page;
+
+    $query = 'SELECT * FROM records_app.office ORDER BY name LIMIT ' . $page_first_result . ',' . $result_per_page;
     $result = mysqli_query($conn, $query);
     $offices = mysqli_fetch_all($result, MYSQLI_ASSOC);
     mysqli_free_result($result);
@@ -68,6 +88,7 @@
                                             <th>CITY</th>
                                             <th>COUNTRY</th>
                                             <th>POSTAL</th>
+                                            <th>ACTION</th>
                                         </thead>
                                         <tbody>
                                             <?php foreach ($offices as $office) : ?>
@@ -80,6 +101,10 @@
                                                 <td><?php echo $office ['city'] ?></td>
                                                 <td><?php echo $office ['country'] ?></td>
                                                 <td><?php echo $office ['postal'] ?></td>
+                                                <td>
+                                                    <a href="/office-edit.php?id=<?php echo $office['id']; ?>">
+                                                        <button type="submit" class="btn btn-warning btn-fill pull-right">Edit</button>
+                                                </td>
                                             </tr>
                                             <?php endforeach ?>
                                         </tbody>
@@ -88,6 +113,11 @@
                             </div>
                         </div>
                     </div>
+                    <?php
+                            for($page=1; $page <= $number_of_page; $page++){
+                                echo '<a href = "transaction.php?page='. $page . '">' . $page .'</a>';
+                            }
+                        ?>
                 </div>
             </div>
             <footer class="footer">

@@ -22,11 +22,47 @@
     <?php
         require('config/config.php');
         require('config/db.php');
-        $query = 'SELECT transaction.datelog, transaction.documentcode, transaction.action, office.name AS office_name, CONCAT(employee.firstname, ",", employee.lastname) AS employee_fullname, transaction.remarks FROM records_app.employee, records_app.office, records_app.transaction 
-        WHERE transaction.employee_id = employee.id AND transaction.office_id = office.id';
+        
+        //gts the value sent over
+        if(isset($_GET['search'])){
+            $search = $_GET['search'];
+        }
+
+        //define the total number of result you want per page
+        $result_per_page = 10;
+
+        // find tha total number of results/rows stored in the database
+        $query ="SELECT * FROM employee";
+        $result = mysqli_query($conn, $query);
+        $number_of_result = mysqli_num_rows($result);
+    
+        // determine the total number of page avialable
+        $number_of_page = ceil($number_of_result / $result_per_page);
+    
+        // determine which page number visitor is on
+        if(!isset($_GET['page'])){
+        $page = 1;
+        }else{
+        $page = $_GET['page'];
+        }
+        //determine thr sql LIMIT starting number for the results on the display page
+            $page_first_result = ($page-1) * $result_per_page;
+
+        //create query
+        if(isset($_GET['search']) and strlen($search) > 0 ){
+        $query = 'SELECT transaction.id, transaction.datelog, transaction.documentcode, transaction.action, office.name AS office_name, CONCAT(employee.firstname, ",", employee.lastname) AS employee_fullname, transaction.remarks FROM records_app.employee, records_app.office, records_app.transaction 
+         WHERE transaction.employee_id = employee.id AND transaction.office_id = office.id and transaction.documentcode =' . $search . ' LIMIT ' . $page_first_result . ',' . $result_per_page;
+        } else {
+        $query = 'SELECT transaction.id, transaction.datelog, transaction.documentcode, transaction.action, office.name AS office_name, CONCAT(employee.firstname, ",", employee.lastname) AS employee_fullname, transaction.remarks FROM records_app.employee, records_app.office, records_app.transaction 
+        WHERE transaction.employee_id = employee.id AND transaction.office_id = office.id LIMIT ' . $page_first_result . ',' . $result_per_page;
+        }
+       
+        //get the result        
         $result = (mysqli_query($conn,$query));
+        //free result
         $transactions = mysqli_fetch_all($result, MYSQLI_ASSOC);
         mysqli_free_result($result);
+        //close the connection
         mysqli_close($conn);
     ?>
 
@@ -43,12 +79,16 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
-                            <br>
+                                <br>
                                 <div class="col-md-12">
-                                <a href="./transaction-add.php"> 
+                                    <form action="transaction.php" method="GET">
+                                        <input type="text" name="search" />
+                                        <input type="submit" value="Search" class="btn btn-info btn-fill" />
+                                    </form>
+                                </div>
+                                <a href="/transaction-add.php"> 
                                 <button type="submit" class="btn btn-info btn-fill pull-right">Add New Transaction</button>
                                 </a>
-                                </div>
                                 <div class="card-header ">
                                     <h4 class="card-title">Transactions</h4>
                                     <p class="card-category">Transaction infromation</p>
@@ -62,6 +102,7 @@
                                             <th>Office</th>
                                             <th>Employee</th>
                                             <th>Remarks</th>
+                                            <th>Actions</th>
                                         </thead>
                                         <tbody>
                                             <?php foreach ($transactions as $transaction) : ?>
@@ -71,7 +112,11 @@
                                                 <td><?php echo $transaction['action'] ?></td>         
                                                 <td><?php echo $transaction['office_name'] ?></td>                  
                                                 <td><?php echo $transaction['employee_fullname'] ?></td>                  
-                                                <td><?php echo $transaction['remarks'] ?></td>                  
+                                                <td><?php echo $transaction['remarks'] ?></td>
+                                                <td>
+                                                    <a href="/transaction-edit.php?id=<?php echo $transaction['id']; ?>">
+                                                        <button type="submit" class="btn btn-warning btn-fill pull-right">Edit</button>
+                                                </td>              
                                             </tr>
                                             <?php endforeach ?>
                                         </tbody>
@@ -80,50 +125,56 @@
                             </div>
                         </div>
                     </div>
+                </div><?php
+                            for($page=1; $page <= $number_of_page; $page++){
+                                echo '<a href = "transaction.php?page='. $page . '">' . $page .'</a>';
+                            }
+                        ?>
                 </div>
-            </div>
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="section">
+                <div class="content">
+                    <div class="container-fluid">
+                        <div class="section">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <footer class="footer">
-                <div class="container-fluid">
-                    <nav>
-                        <ul class="footer-menu">
-                            <li>
-                                <a href="#">
-                                    Home
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Company
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Portfolio
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Blog
-                                </a>
-                            </li>
-                        </ul>
-                        <p class="copyright text-center">
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <nav>
+                            <ul class="footer-menu">
+                                <li>
+                                    <a href="#">
+                                        Home
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Company
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Portfolio
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Blog
+                                    </a>
+                                </li>
+                            </ul>
+                            <p class="copyright text-center">
                             ©
                             <script>
                                 document.write(new Date().getFullYear())
                             </script>
                             <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
-                        </p>
-                    </nav>
-                </div>
-            </footer>
+                            </p>
+                        </nav>
+                    </div>
+                </footer>
+            </div>
         </div>
+    </div>
 </body>
 <!--   Core JS Files   -->
 <script src="assets/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
