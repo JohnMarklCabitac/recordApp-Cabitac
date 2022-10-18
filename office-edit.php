@@ -24,8 +24,8 @@
      require('config/db.php');
 
      //get value sent over
-     if(isset($_GET['id'])){
-        $id = $_GET['id'];}
+
+        $id = $_GET['id'];
      //create query
      $query = "SELECT * FROM office WHERE id=" . $id;
 

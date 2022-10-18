@@ -27,7 +27,7 @@
     $result_per_page = 10;
 
 // find tha total number of results/rows stored in the database
-    $query ="SELECT * FROM employee";
+    $query ="SELECT * FROM office";
     $result = mysqli_query($conn, $query);
     $number_of_result = mysqli_num_rows($result);
     
